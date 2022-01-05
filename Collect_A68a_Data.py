@@ -1,6 +1,5 @@
 import ice
 import pickle
-import matplotlib.pyplot as plt
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~PIXEL COUNT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pix367 = ice.ice_olate(r"/nbhome/Nuzhat.Khan/a68/a68a/MODT367_2020-*",layerName="red") #process
