@@ -1,3 +1,4 @@
+import rasterio
 from rasterio.plot import show
 import sys
 import cv2
@@ -274,27 +275,27 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                             BergArea = area_PixelImageDimensions(mask,img)
                         elif areaMethod=="area_PS": #use second area method
                             if retCnt == True: #return coordinates of contour and area
-                                BergArea,coords = area_PS(cnt,file,retCnt=True)
+                                BergArea,coords = area_PS(cnt,file,retCon=True)
                             else: #return only area
                                 BergArea = area_PS(cnt,file)
                         elif areaMethod=="area_PS2": #use third area method
                             if retCnt == True: 
-                                BergArea,coords = area_PS2(cnt,file,retCnt=True)
+                                BergArea,coords = area_PS2(cnt,file,retCon=True)
                             else:
                                 BergArea = area_PS2(cnt,file)
                         elif areaMethod=="area_LL": #use fourth area method
                             if retCnt == True:
-                                BergArea,coords = area_LL(cnt,file,retCnt=True)
+                                BergArea,coords = area_LL(cnt,file,retCon=True)
                             else:
                                 BergArea = area_LL(cnt,file)
                         elif areaMethod=="area_LL2": #use fifth area method
                             if retCnt == True:
-                                BergArea,coords = area_LL2(cnt,file,retCnt=True)
+                                BergArea,coords = area_LL2(cnt,file,retCon=True)
                             else:
                                 BergArea = area_LL2(cnt,file)
                         elif areaMethod=="area_Geographic": #use sixth area method
                             if retCnt == True:
-                                BergArea,coords = area_Geographic(cnt,file,retCnt=True)
+                                BergArea,coords = area_Geographic(cnt,file,retCon=True)
                             else:
                                 BergArea = area_Geographic(cnt,file)                   
                         else: #use pixel area method
@@ -320,27 +321,27 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                             curr_BergArea = area_PixelImageDimensions(mask,img)
                         elif areaMethod=="area_PS": #use second area method
                             if retCnt == True: #return coordinates of contour and area
-                                curr_BergArea,curr_coords = area_PS(icnt,file,retCnt=True)
+                                curr_BergArea,curr_coords = area_PS(icnt,file,retCon=True)
                             else: #return only area
                                 curr_BergArea = area_PS(icnt,file)
                         elif areaMethod=="area_PS2": #use third area method
                             if retCnt == True: 
-                                curr_BergArea,curr_coords = area_PS2(icnt,file,retCnt=True)
+                                curr_BergArea,curr_coords = area_PS2(icnt,file,retCon=True)
                             else:
                                 curr_BergArea = area_PS2(icnt,file)
                         elif areaMethod=="area_LL": #use fourth area method
                             if retCnt == True:
-                                curr_BergArea,curr_coords = area_LL(icnt,file,retCnt=True)
+                                curr_BergArea,curr_coords = area_LL(icnt,file,retCon=True)
                             else:
                                 curr_BergArea = area_LL(icnt,file)
                         elif areaMethod=="area_LL2": #use fifth area method
                             if retCnt == True:
-                                curr_BergArea,curr_coords = area_LL2(icnt,file,retCnt=True)
+                                curr_BergArea,curr_coords = area_LL2(icnt,file,retCon=True)
                             else:
                                 curr_BergArea = area_LL2(icnt,file)
                         elif areaMethod=="area_Geographic": #use sixth area method
                             if retCnt == True:
-                                curr_BergArea,curr_coords = area_Geographic(icnt,file,retCnt=True)
+                                curr_BergArea,curr_coords = area_Geographic(icnt,file,retCon=True)
                             else:
                                 curr_BergArea = area_Geographic(icnt,file)                   
                         else: #use pixel area method
@@ -367,40 +368,48 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
             else: 
                 cnt = max(contours, key=cv2.contourArea) #find max contour
                 if areaMethod=="area_PixelImageDimensions": #use first area method
+                    print("piximd")
                     h, w = img.shape[:2]
                     mask = np.zeros((h, w), np.uint8)
                     cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
                     BergArea = area_PixelImageDimensions(mask,img)
                 elif areaMethod=="area_PS": #use second area method
                     if retCnt == True: #return coordinates of contour and area
-                        BergArea,coords = area_PS(cnt,file,retCnt=True)
+                        BergArea,coords = area_PS(cnt,file,retCon=True)
                     else: #return only area
+                        print("ps")
                         BergArea = area_PS(cnt,file)
                 elif areaMethod=="area_PS2": #use third area method
                     if retCnt == True: 
-                        BergArea,coords = area_PS2(cnt,file,retCnt=True)
+                        BergArea,coords = area_PS2(cnt,file,retCon=True)
                     else:
+                        print("ps2")
                         BergArea = area_PS2(cnt,file)
                 elif areaMethod=="area_LL": #use fourth area method
                     if retCnt == True:
-                        BergArea,coords = area_LL(cnt,file,retCnt=True)
+                        BergArea,coords = area_LL(cnt,file,retCon=True)
                     else:
+                        print("ll")
                         BergArea = area_LL(cnt,file)
                 elif areaMethod=="area_LL2": #use fifth area method
                     if retCnt == True:
-                        BergArea,coords = area_LL2(cnt,file,retCnt=True)
+                        BergArea,coords = area_LL2(cnt,file,retCon=True)
                     else:
+                        print("ll2")
                         BergArea = area_LL2(cnt,file)
                 elif areaMethod=="area_Geographic": #use sixth area method
                     if retCnt == True:
-                        BergArea,coords = area_Geographic(cnt,file,retCnt=True)
+                        BergArea,coords = area_Geographic(cnt,file,retCon=True)
                     else:
+                        print("geo")
                         BergArea = area_Geographic(cnt,file)                   
                 else: #use pixel area method
+                    print("pix")
                     h, w = img.shape[:2]
                     mask = np.zeros((h, w), np.uint8)
                     cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
                     BergArea = cv2.countNonZero(mask) #count nonzero pixels
+                    print(BergArea)
                 if display == True: #display image
                     h, w = img.shape[:2]
                     mask = np.zeros((h, w), np.uint8)
