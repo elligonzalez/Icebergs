@@ -269,6 +269,8 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                     icnt = contours[i] #current contour
                     if i == 0: #the first contour
                         if areaMethod=="area_PixelImageDimensions": #use first area method
+                            if retCnt==True: #error if trying to obtain contour coordinates 
+                                raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                             h, w = img.shape[:2]
                             mask = np.zeros((h, w), np.uint8)
                             cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
@@ -299,6 +301,8 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                             else:
                                 BergArea = area_Geographic(cnt,file)                   
                         else: #use pixel area method
+                            if retCnt==True: #error if trying to obtain contour coordinates 
+                                raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                             h, w = img.shape[:2]
                             mask = np.zeros((h, w), np.uint8)
                             cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
@@ -315,6 +319,8 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                             print('AREA',BergArea) #estimated area
                     else: #conotur is not the first one
                         if areaMethod=="area_PixelImageDimensions": #use first area method
+                            if retCnt==True: #error if trying to obtain contour coordinates 
+                                raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                             h, w = img.shape[:2]
                             mask = np.zeros((h, w), np.uint8)
                             cv2.drawContours(mask, [icnt],-1, 255, -1) #create mask
@@ -345,6 +351,8 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                             else:
                                 curr_BergArea = area_Geographic(icnt,file)                   
                         else: #use pixel area method
+                            if retCnt==True: #error if trying to obtain contour coordinates 
+                                raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                             h, w = img.shape[:2]
                             mask = np.zeros((h, w), np.uint8)
                             cv2.drawContours(mask, [icnt],-1, 255, -1) #create mask
@@ -368,7 +376,8 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
             else: 
                 cnt = max(contours, key=cv2.contourArea) #find max contour
                 if areaMethod=="area_PixelImageDimensions": #use first area method
-                    print("piximd")
+                    if retCnt==True: #error if trying to obtain contour coordinates 
+                        raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                     h, w = img.shape[:2]
                     mask = np.zeros((h, w), np.uint8)
                     cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
@@ -377,34 +386,30 @@ def ice_olate(directory,layerName=None,display=False,setThresh=None,areaMethod=N
                     if retCnt == True: #return coordinates of contour and area
                         BergArea,coords = area_PS(cnt,file,retCon=True)
                     else: #return only area
-                        print("ps")
                         BergArea = area_PS(cnt,file)
                 elif areaMethod=="area_PS2": #use third area method
                     if retCnt == True: 
                         BergArea,coords = area_PS2(cnt,file,retCon=True)
                     else:
-                        print("ps2")
                         BergArea = area_PS2(cnt,file)
                 elif areaMethod=="area_LL": #use fourth area method
                     if retCnt == True:
                         BergArea,coords = area_LL(cnt,file,retCon=True)
                     else:
-                        print("ll")
                         BergArea = area_LL(cnt,file)
                 elif areaMethod=="area_LL2": #use fifth area method
                     if retCnt == True:
                         BergArea,coords = area_LL2(cnt,file,retCon=True)
                     else:
-                        print("ll2")
                         BergArea = area_LL2(cnt,file)
                 elif areaMethod=="area_Geographic": #use sixth area method
                     if retCnt == True:
                         BergArea,coords = area_Geographic(cnt,file,retCon=True)
                     else:
-                        print("geo")
                         BergArea = area_Geographic(cnt,file)                   
                 else: #use pixel area method
-                    print("pix")
+                    if retCnt==True: #error if trying to obtain contour coordinates 
+                        raise Exception('Cannot obtain contour coordinates with this area method. Please try a different area method.')
                     h, w = img.shape[:2]
                     mask = np.zeros((h, w), np.uint8)
                     cv2.drawContours(mask, [cnt],-1, 255, -1) #create mask
